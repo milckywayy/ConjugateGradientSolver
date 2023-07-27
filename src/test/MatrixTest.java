@@ -1,44 +1,29 @@
 package test;
 
 import matrix.Matrix;
-import matrix.MatrixCalc;
+import matrix.MatrixReader;
 import solver.ConjugateGradientSolver;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
 
 public class MatrixTest {
+    public static void main(String[] args) throws IOException {
+        ConjugateGradientSolver cgs = new ConjugateGradientSolver(1000, 1e-6);
+        MatrixReader reader = new MatrixReader();
 
-    public static void main(String[] args) {
-        List<Double> values = new ArrayList<>();
-        List<Double> values2 = new ArrayList<>();
-        values.add(4.0);
-        values.add(2.0);
-        values.add(-1.0);
-        values.add(2.0);
-        values.add(5.0);
-        values.add(2.0);
-        values.add(-1.0);
-        values.add(2.0);
-        values.add(10.0);
+        Matrix A;
+        Matrix b;
 
-        values2.add(12.0);
-        values2.add(-8.0);
-        values2.add(4.0);
+        A = reader.read("src/test/data/A3.txt");
+        b = reader.read("src/test/data/b3.txt");
 
-        MatrixCalc calc = new MatrixCalc();
-        ConjugateGradientSolver cgs = new ConjugateGradientSolver(100, 0.001);
+        long startTime, endTime, elapsedTime;
 
-        Matrix A = new Matrix(values, 3, 3);
-        Matrix b = new Matrix(values2, 3, 1);
-
-        System.out.println(cgs.solve(A, b));
-
-        //System.out.println((calc.multiply(m, m2)).toString());
-
-//        System.out.println(m.toString());
-//        m = calc.transpose(m);
-//        System.out.println(m.toString());
-
+        startTime = System.currentTimeMillis();
+        cgs.solve(A, b);
+        endTime = System.currentTimeMillis();
+        elapsedTime = endTime - startTime;
+        System.out.println("Execution time: " + elapsedTime + " ms");
     }
 }
+

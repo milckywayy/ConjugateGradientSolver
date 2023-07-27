@@ -1,6 +1,5 @@
 package matrix;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -73,7 +72,6 @@ public class Matrix {
     public String toString() {
         StringBuilder result = new StringBuilder();
 
-        result.append("[\n");
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 result.append(values.get((i * n) + j)).append(" ");
@@ -81,7 +79,7 @@ public class Matrix {
             result.append("\n");
         }
 
-        return result + "]";
+        return String.valueOf(result);
     }
 
     @Override

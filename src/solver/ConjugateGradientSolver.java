@@ -26,10 +26,16 @@ public class ConjugateGradientSolver {
         double beta;
         int iteration = 0;
 
-        while (calc.multiply(calc.transpose(r0), r0).getElement(0, 0) > limit || iteration >= maxIterations) {
+        if (A.getM() != A.getN()) {
+            throw new IllegalArgumentException("The matrix is not square.");
+        }
+
+        Matrix r0_r = calc.multiply(calc.transpose(r0), r0);
+
+        while (r0_r.getElement(0, 0) > limit && iteration < maxIterations) {
             iteration++;
 
-            alpha = calc.multiply(calc.transpose(r0), r0).getElement(0, 0);
+            alpha = r0_r.getElement(0, 0);
             alpha /= calc.multiply(calc.transpose(p0), calc.multiply(A, p0)).getElement(0, 0);
 
             x1 = calc.add(x0, calc.dotProduct(p0, alpha));
@@ -37,13 +43,15 @@ public class ConjugateGradientSolver {
             r1 = calc.add(r0, calc.dotProduct(calc.multiply(A, p0), alpha * -1));
 
             beta = calc.multiply(calc.transpose(r1), r1).getElement(0, 0);
-            beta /= calc.multiply(calc.transpose(r0), r0).getElement(0, 0);
+            beta /= r0_r.getElement(0, 0);
 
             p1 = calc.add(r1, calc.dotProduct(p0, beta));
 
             x0 = x1;
             p0 = p1;
             r0 = r1;
+
+            r0_r = calc.multiply(calc.transpose(r0), r0);
         }
 
         return x0;

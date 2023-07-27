@@ -9,10 +9,11 @@ public class Matrix {
     private List<Double> values = new ArrayList<>();
     private int m, n;
 
-    public Matrix(List<Double> values, int n, int m) {
+    public Matrix(List<Double> values, int m, int n) {
 
-        if (values.size() != n * m)
-            throw new InvalidParameterException("Invalid matrix size.");
+        if ((values.size() != m * n) || values.size() < 1) {
+            throw new IllegalArgumentException("Invalid matrix size.");
+        }
 
         this.values.addAll(values);
         this.m = m;
@@ -25,12 +26,27 @@ public class Matrix {
         }
     }
 
+    public void transpose() {
+        List<Double> transposedValues = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                transposedValues.add(getElement(j, i));
+            }
+        }
+
+        int temp = m;
+        m = n;
+        n = temp;
+
+        values = transposedValues;
+    }
+
     public int size() {
         return values.size();
     }
 
     public double getElement(int m, int n) {
-        return values.get((m * n) + n);
+        return values.get((m * this.getN()) + n);
     }
 
     public double getElement(int index) {
@@ -45,15 +61,22 @@ public class Matrix {
         return m;
     }
 
-    public void print() {
-        System.out.println("[");
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+
+        result.append("[\n");
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                System.out.print(values.get((i * m) + j) + " ");
+                result.append(values.get((i * n) + j)).append(" ");
             }
-            System.out.print("\n");
+            result.append("\n");
         }
-        System.out.println("]");
+
+        return result + "]";
+    }
+
+    public Matrix copy() {
+        return new Matrix(values, m, n);
     }
 
     @Override

@@ -44,4 +44,25 @@ public class MatrixCalc {
         return new Matrix(resultValues, a.getM(), b.getN());
     }
 
+    public Matrix dotProduct(Matrix m, double scalar) {
+        List<Double> resultValues = new ArrayList<>();
+
+        for (int i = 0; i < m.size(); i++) {
+            resultValues.add(m.getElement(i) * scalar);
+        }
+
+        return new Matrix(resultValues, m.getM(), m.getN());
+    }
+
+    public Matrix transpose(Matrix m) {
+        List<Double> transposedValues = new ArrayList<>();
+
+        for (int i = 0; i < m.getN(); i++) {
+            for (int j = 0; j < m.getM(); j++) {
+                transposedValues.add(m.getElement(j, i));
+            }
+        }
+
+        return new Matrix(transposedValues, m.getN(), m.getM());
+    }
 }

@@ -20,25 +20,13 @@ public class Matrix {
         this.n = n;
     }
 
-    public void dotProduct(double scalar) {
-        for (int i = 0; i < values.size(); i++) {
-            values.set(i, values.get(i) * scalar);
+    public Matrix(int m, int n) {
+        this.m = m;
+        this.n = n;
+
+        for (int i = 0; i < m * n; i++) {
+            values.add(0.0);
         }
-    }
-
-    public void transpose() {
-        List<Double> transposedValues = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                transposedValues.add(getElement(j, i));
-            }
-        }
-
-        int temp = m;
-        m = n;
-        n = temp;
-
-        values = transposedValues;
     }
 
     public int size() {
@@ -53,14 +41,35 @@ public class Matrix {
         return values.get(index);
     }
 
-    public int getN() {
-        return n;
-    }
-
     public int getM() {
         return m;
     }
 
+    public int getN() {
+        return n;
+    }
+
+    public void setElement(int index, double value) {
+        values.set(index, value);
+    }
+
+    public void setElement(int m, int n, double value) {
+        values.set((m * this.getN()) + n, value);
+    }
+
+    public void setM(int m) {
+        this.m = m;
+    }
+
+    public void setN(int n) {
+        this.n = n;
+    }
+
+    public Matrix copy() {
+        return new Matrix(values, m, n);
+    }
+
+    @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
 
@@ -73,10 +82,6 @@ public class Matrix {
         }
 
         return result + "]";
-    }
-
-    public Matrix copy() {
-        return new Matrix(values, m, n);
     }
 
     @Override

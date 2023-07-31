@@ -1,4 +1,4 @@
-import GraphicalUserInterface.GraphicalUserInterface;
+import graphicaluserinterface.GraphicalUserInterface;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import matrix.MatrixReader;
 import solver.ConjugateGradientSolver;

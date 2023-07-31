@@ -1,8 +1,7 @@
-package GraphicalUserInterface;
+package graphicaluserinterface;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
 
 public class matrixElementField extends JTextField {
     public matrixElementField(int columns) {

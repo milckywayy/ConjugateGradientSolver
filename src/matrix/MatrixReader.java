@@ -16,6 +16,10 @@ public class MatrixReader {
         int m = 0;
         int counter = 0;
 
+        if (!(new File(fileName)).isFile()) {
+            throw new FileNotFoundException("File doesn't exist.");
+        }
+
         try (Scanner scanner = new Scanner(new File(fileName))) {
             while (scanner.hasNextLine()) {
                 m++;

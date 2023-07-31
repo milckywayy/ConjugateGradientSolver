@@ -10,7 +10,7 @@ public class Matrix {
 
     public Matrix(List<Double> values, int m, int n) {
 
-        if ((values.size() != m * n) || values.size() < 1) {
+        if ((values.size() != m * n) || values.isEmpty()) {
             throw new IllegalArgumentException("Invalid matrix size.");
         }
 
@@ -46,6 +46,10 @@ public class Matrix {
 
     public int getN() {
         return n;
+    }
+
+    public List<Double> getValues() {
+        return values;
     }
 
     public void setElement(int index, double value) {

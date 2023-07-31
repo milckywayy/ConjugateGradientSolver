@@ -21,10 +21,12 @@ public class GraphicalUserInterface extends JFrame {
     private JPanel matrixAField;
     private JPanel matrixXField;
     private JPanel matrixBField;
-    private Security security;
-    private MatrixReader matrixReader;
-    private ConjugateGradientSolver solver;
-    private MatrixFieldReader matrixFieldReader;
+    private JPanel topPanel;
+    private JPanel contentPanel;
+    private final Security security;
+    private final MatrixReader matrixReader;
+    private final ConjugateGradientSolver solver;
+    private final MatrixFieldReader matrixFieldReader;
 
     public GraphicalUserInterface() {
         setContentPane(GradientConjugateSolverGUI);
@@ -59,11 +61,6 @@ public class GraphicalUserInterface extends JFrame {
         matrixFieldReader = new MatrixFieldReader();
 
         setMatrixSize();
-    }
-
-    public boolean areFieldCorrect() {
-        // TODO func body
-        return false;
     }
 
     private void setMatrixSize() {
@@ -118,6 +115,10 @@ public class GraphicalUserInterface extends JFrame {
             return;
         }
 
+        if (!security.isInteger(matrixSizeField.getText())) {
+            matrixSizeField.setText("0");
+        }
+
         if (matrix.getM() == matrix.getN()) {
             if (Integer.parseInt(matrixSizeField.getText()) != matrix.getM()) {
                 matrixSizeField.setText(matrix.getM() + "");
@@ -146,10 +147,32 @@ public class GraphicalUserInterface extends JFrame {
         int matrixSize;
         Matrix resultMatrix;
 
+        if (security.isInteger(maxIterationsField.getText())) {
+            solver.setMaxIterations(Integer.parseInt(maxIterationsField.getText()));
+        }
+        else {
+            JOptionPane.showMessageDialog(this, "Iterations value must be an integer.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (security.isDouble(precisionField.getText())) {
+            solver.setPrecision(Double.parseDouble(precisionField.getText()));
+        }
+        else {
+            JOptionPane.showMessageDialog(this, "Precision value must be a float number.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!matrixFieldReader.areFieldsCorrect(matrixAField) || !matrixFieldReader.areFieldsCorrect(matrixBField)) {
+            JOptionPane.showMessageDialog(this, "Matrix elements must be a float number.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         if (security.isInteger(matrixSizeField.getText())) {
             matrixSize = Integer.parseInt(matrixSizeField.getText());
         }
         else {
+            JOptionPane.showMessageDialog(this, "Matrix size must  be an integer.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 

@@ -5,13 +5,21 @@ import matrix.MatrixCalc;
 
 public class ConjugateGradientSolver {
     int maxIterations;
-    double limit;
+    double precision;
     MatrixCalc calc;
 
     public ConjugateGradientSolver(int maxIterations, double precision) {
         calc = new MatrixCalc();
         this.maxIterations = maxIterations;
-        this.limit = precision;
+        this.precision = precision;
+    }
+
+    public void setMaxIterations(int maxIterations) {
+        this.maxIterations = maxIterations;
+    }
+
+    public void setPrecision(double precision) {
+        this.precision = precision;
     }
 
     public Matrix solve(Matrix A, Matrix b) {
@@ -32,7 +40,7 @@ public class ConjugateGradientSolver {
 
         Matrix r0_r = calc.multiply(calc.transpose(r0), r0);
 
-        while (r0_r.getElement(0, 0) > limit && iteration < maxIterations) {
+        while (r0_r.getElement(0, 0) > precision && iteration < maxIterations) {
             iteration++;
 
             alpha = r0_r.getElement(0, 0);

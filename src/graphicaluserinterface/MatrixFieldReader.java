@@ -43,4 +43,13 @@ public class MatrixFieldReader {
         }
         return true;
     }
+
+    public boolean areFieldsCorrect(JPanel panel) {
+        for (Component component : panel.getComponents()) {
+            if (!security.isDouble(((JTextField)component).getText())) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

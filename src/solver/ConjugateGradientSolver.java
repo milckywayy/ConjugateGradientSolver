@@ -8,10 +8,10 @@ public class ConjugateGradientSolver {
     double limit;
     MatrixCalc calc;
 
-    public ConjugateGradientSolver(int maxIterations, double limit) {
+    public ConjugateGradientSolver(int maxIterations, double precision) {
         calc = new MatrixCalc();
         this.maxIterations = maxIterations;
-        this.limit = limit;
+        this.limit = precision;
     }
 
     public Matrix solve(Matrix A, Matrix b) {

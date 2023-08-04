@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 
 public class GraphicalUserInterface extends JFrame {
@@ -23,10 +24,12 @@ public class GraphicalUserInterface extends JFrame {
     private JPanel matrixBField;
     private JPanel topPanel;
     private JPanel contentPanel;
+
     private final Security security;
     private final MatrixReader matrixReader;
     private final ConjugateGradientSolver solver;
     private final MatrixFieldReader matrixFieldReader;
+    JFileChooser fileChooser;
 
     public GraphicalUserInterface() {
         setContentPane(GradientConjugateSolverGUI);
@@ -59,6 +62,7 @@ public class GraphicalUserInterface extends JFrame {
         matrixReader = new MatrixReader();
         solver = new ConjugateGradientSolver(Integer.parseInt(maxIterationsField.getText()),Double.parseDouble(precisionField.getText()));
         matrixFieldReader = new MatrixFieldReader();
+        fileChooser = new JFileChooser();
 
         setMatrixSize();
     }
@@ -163,7 +167,12 @@ public class GraphicalUserInterface extends JFrame {
             return;
         }
 
-        if (!matrixFieldReader.areFieldsCorrect(matrixAField) || !matrixFieldReader.areFieldsCorrect(matrixBField)) {
+        if (!matrixFieldReader.isMatrixFieldFull(matrixAField) || (!matrixFieldReader.isMatrixFieldFull(matrixBField))) {
+            JOptionPane.showMessageDialog(this, "Insert all matrix elements.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!matrixFieldReader.areMatricPanelsCorrect(matrixAField) || !matrixFieldReader.areMatricPanelsCorrect(matrixBField)) {
             JOptionPane.showMessageDialog(this, "Matrix elements must be a float number.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -172,25 +181,37 @@ public class GraphicalUserInterface extends JFrame {
             matrixSize = Integer.parseInt(matrixSizeField.getText());
         }
         else {
-            JOptionPane.showMessageDialog(this, "Matrix size must  be an integer.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Matrix size must be an integer.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        if (matrixFieldReader.isFieldFull(matrixAField) && (matrixFieldReader.isFieldFull(matrixBField))) {
-            resultMatrix = solver.solve(matrixFieldReader.readFromPanel(matrixAField, matrixSize, matrixSize),
-                        matrixFieldReader.readFromPanel(matrixBField, matrixSize, 1));
-
-            matrixFieldReader.writeToPanel(resultMatrix, matrixXField);
+        try {
+            resultMatrix = solver.solve(matrixFieldReader.readFromPanel(matrixAField, matrixSize, matrixSize), matrixFieldReader.readFromPanel(matrixBField, matrixSize, 1));
         }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        matrixFieldReader.writeToPanel(resultMatrix, matrixXField);
     }
 
     private String showFileDialog() {
-        FileDialog fileDialog = new FileDialog(this, "Choose a matrix file", FileDialog.LOAD);
-        fileDialog.setDirectory("%userprofile%");
-        fileDialog.setVisible(true);
+//        FileDialog fileDialog = new FileDialog(this, "Choose a matrix file", FileDialog.LOAD);
+//        fileDialog.setDirectory("%userprofile%");
+//        fileDialog.setVisible(true);
+//
+//        if (fileDialog.getDirectory() != null && fileDialog.getFile() != null) {
+//            return fileDialog.getDirectory() + fileDialog.getFile();
+//        }
+//
+//        return null;
 
-        if (fileDialog.getDirectory() != null && fileDialog.getFile() != null) {
-            return fileDialog.getDirectory() + fileDialog.getFile();
+        int returnValue = fileChooser.showOpenDialog(null);
+
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            return selectedFile.getAbsolutePath();
         }
 
         return null;

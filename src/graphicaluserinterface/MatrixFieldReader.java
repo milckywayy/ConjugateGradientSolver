@@ -34,17 +34,16 @@ public class MatrixFieldReader {
         }
     }
 
-    public boolean isFieldFull(JPanel panel) {
-        Component[] components = panel.getComponents();
-        for (Component component : components) {
-            if (!security.isDouble(((JTextField)component).getText())) {
+    public boolean isMatrixFieldFull(JPanel panel) {
+        for (Component component : panel.getComponents()) {
+            if (((JTextField)component).getText().trim().isEmpty()) {
                 return false;
             }
         }
         return true;
     }
 
-    public boolean areFieldsCorrect(JPanel panel) {
+    public boolean areMatricPanelsCorrect(JPanel panel) {
         for (Component component : panel.getComponents()) {
             if (!security.isDouble(((JTextField)component).getText())) {
                 return false;

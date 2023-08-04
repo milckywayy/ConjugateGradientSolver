@@ -2,14 +2,17 @@ package solver;
 
 import matrix.Matrix;
 import matrix.MatrixCalc;
+import matrix.MatrixPropertiesChecker;
 
 public class ConjugateGradientSolver {
     int maxIterations;
     double precision;
     MatrixCalc calc;
+    MatrixPropertiesChecker matrixChecker;
 
     public ConjugateGradientSolver(int maxIterations, double precision) {
         calc = new MatrixCalc();
+        matrixChecker = new MatrixPropertiesChecker();
         this.maxIterations = maxIterations;
         this.precision = precision;
     }
@@ -23,6 +26,14 @@ public class ConjugateGradientSolver {
     }
 
     public Matrix solve(Matrix A, Matrix b) {
+        if (!matrixChecker.isSymmetric(A)) {
+            throw new IllegalArgumentException("The matrix is not symmetrical.");
+        }
+
+        if (!matrixChecker.isPositiveDefinite(A, precision)) {
+            throw new IllegalArgumentException("The matrix is not positive definite.");
+        }
+
         Matrix x0 = new Matrix(b.getM(), b.getN());
         Matrix x1;
         Matrix r0 = b.copy();
@@ -33,10 +44,6 @@ public class ConjugateGradientSolver {
         double alpha;
         double beta;
         int iteration = 0;
-
-        if (A.getM() != A.getN()) {
-            throw new IllegalArgumentException("The matrix is not square.");
-        }
 
         Matrix r0_r = calc.multiply(calc.transpose(r0), r0);
 
